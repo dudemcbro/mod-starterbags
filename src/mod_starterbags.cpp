@@ -22,6 +22,15 @@ void MailItemToPlayer(Player* player, Item* item)
         .AddItem(item)
         .SendMailTo(trans, player, MailSender(player, MAIL_STATIONERY_GM));
 
+    // The mail is committed right away, while the rest of the grant is only
+    // saved with the character. Clear the first login flag in the same
+    // transaction so a crash before the next character save cannot lead to
+    // the bags being granted (and mailed) a second time.
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_REM_AT_LOGIN_FLAG);
+    stmt->SetData(0, uint16(AT_LOGIN_FIRST));
+    stmt->SetData(1, player->GetGUID().GetCounter());
+    trans->Append(stmt);
+
     CharacterDatabase.CommitTransaction(trans);
 }
 
@@ -110,12 +119,28 @@ void EnsureBankBagSlotsFilled(Player* player)
 }
 } // namespace
 
+// Grants the bags once per character, on its first login.
+//
+// The core calls OnPlayerFirstLogin for a character that still carries the
+// AT_LOGIN_FIRST flag. The flag is set when the character is created and is
+// cleared once it has entered the world; it is saved together with the
+// character's items, so the grant and the "already granted" marker reach the
+// database in the same save. No extra table or setting is needed.
+//
+// Consequences:
+// - A character gets bags at most once, so selling or deleting them does not
+//   bring new ones.
+// - Characters that had already logged in before this module was installed
+//   (or before this version replaced the old every-login behaviour) get
+//   nothing from it.
+// - Random bots created by mod-playerbots never have AT_LOGIN_FIRST set, so
+//   they never get bags. No playerbots code is needed for that.
 class StarterBagsPlayerScript : public PlayerScript
 {
 public:
-    StarterBagsPlayerScript() : PlayerScript("StarterBagsPlayerScript", { PLAYERHOOK_ON_LOGIN }) {}
+    StarterBagsPlayerScript() : PlayerScript("StarterBagsPlayerScript", { PLAYERHOOK_ON_FIRST_LOGIN }) {}
 
-    void OnPlayerLogin(Player* player) override
+    void OnPlayerFirstLogin(Player* player) override
     {
         if (!player)
             return;
