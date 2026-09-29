@@ -3,3 +3,6 @@ build/
 *.swp
 *.swo
 *.log
+
+# Local config copies; only the .conf.dist template is tracked
+conf/*.conf
