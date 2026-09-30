@@ -1,0 +1,41 @@
+#
+# mod-starterbags configuration
+#
+# Copy this file to mod_starterbags.conf in the worldserver's configs/modules
+# folder and edit the copy. Changes apply to characters that log in for the
+# first time after the change (for example after .reload config or a restart).
+#
+
+###################################################################################################
+# STARTER BAGS
+#
+#    StarterBags.Enable
+#        Description: Give bags to characters on their first login. Each character gets bags at
+#                     most once. Characters that are created while this is 0 never get bags from
+#                     this module, even if it is enabled later.
+#        Default:     1 - Enabled
+#                     0 - Disabled
+
+StarterBags.Enable = 1
+
+#
+#    StarterBags.BagEntry
+#        Description: item_template entry of the bag that is handed out. It must be a bag
+#                     (class 1, InventoryType 18), otherwise no bags are given and an error is
+#                     logged under the module.starterbags filter.
+#        Default:     4241 - Green Woolen Bag (8 slots)
+
+StarterBags.BagEntry = 4241
+
+#
+#    StarterBags.UnlockBankBagSlots
+#        Description: On the first login, unlock all 7 bank bag slots for free and fill them with
+#                     bags. When disabled, bank bag slots must be bought as usual and only bank bag
+#                     slots that are already unlocked are filled (a new character has none).
+#        Default:     0 - Disabled
+#                     1 - Enabled
+
+StarterBags.UnlockBankBagSlots = 0
+
+#
+###################################################################################################
