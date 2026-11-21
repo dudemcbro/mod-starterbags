@@ -1,9 +1,17 @@
 # mod-starterbags
 
+<img src="icon.png" alt="" width="64" align="right">
+
 An [AzerothCore](https://www.azerothcore.org/) (WotLK 3.3.5a) module that gives
 every new character a full set of bags on its first login.
 
-## What it does
+- **Author:** [dudemcbro](https://github.com/dudemcbro)
+- **License:** [GNU GPL v3.0](LICENSE)
+- **Works with:** AzerothCore WotLK (developed against the
+  [mod-playerbots AzerothCore fork](https://github.com/mod-playerbots/azerothcore-wotlk)).
+  The module only uses standard core APIs, with no SQL and no core patches.
+
+## Features
 
 The first time a character enters the world, the module:
 
@@ -48,34 +56,20 @@ Characters that belong to a real account are treated like any other
 character, whether their first login is by the player or as a bot. The module
 has no dependency on mod-playerbots.
 
-## Requirements
-
-- AzerothCore WotLK (developed against the
-  [mod-playerbots AzerothCore fork](https://github.com/mod-playerbots/azerothcore-wotlk)).
-  The module only uses standard core APIs.
-- No SQL and no core patches.
-
-## Installation
+## Quick start
 
 1. Clone the module into the core's `modules` folder:
-
    ```sh
    cd <azerothcore>/modules
    git clone https://github.com/dudemcbro/mod-starterbags.git
    ```
-
 2. Re-run CMake and rebuild the core, for example with
    `./acore.sh compiler build`, or with `cmake` followed by `make install` in
    your build folder. No `CMakeLists.txt` is needed: AzerothCore compiles
    everything under `src/` and calls `Addmod_starterbagsScripts()`. CMake has
    to run again so it picks up the module and its config file.
-
 3. Set up the config file (see below).
-
 4. Restart `worldserver`.
-
-To remove the module, delete its folder, re-run CMake and rebuild. Bags and
-bank slots that were already given stay with the characters.
 
 ## Configuration
 
@@ -117,6 +111,11 @@ bank bag slots for free on every login. The new default is `0`. Set
 `StarterBags.UnlockBankBagSlots = 1` to keep giving new characters free bank
 bag slots. Existing characters keep the slots they already have.
 
+## Removing the module
+
+Delete its folder, re-run CMake and rebuild. Bags and bank slots that were already
+given stay with the characters.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on
@@ -125,4 +124,4 @@ changes, please open an issue first, and describe how you tested your change.
 
 ## License
 
-GNU General Public License v3.0, see [LICENSE](LICENSE).
+Licensed under the GNU General Public License v3.0. See [LICENSE](LICENSE).
